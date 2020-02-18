@@ -13,13 +13,9 @@ data Expression
     | Application (Expression) [Expression]
     deriving Show
 
-data Operation
-    = Add Expression Expression
-    | Minus Expression Expression
-    | Product Expression Expression
-    | Division Expression Expression
-    | Power Expression Expression
-    | Trig Expression Expression
+data Law
+    = Law String Expression Expression
 
-data Trig
-    = Sin | Cos | Tan
+data Step = Step LawName Expression
+
+data Calculation = Calc Expression [Step]
