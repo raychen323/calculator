@@ -1,4 +1,4 @@
-module Data
+module Data where
 
 {-# OPTIONS_GHC -Wall #-}
 import Text.Megaparsec
