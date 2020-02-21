@@ -27,14 +27,15 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      DataTypes,
+      Parse
   other-modules:
       Paths_calculator
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
-      , megaparsec >= 5.0.0 && <= 9.0.0
+      , megaparsec >= 5.0.0 && <= 8.0.0
   default-language: Haskell2010
 
 executable calculator-exe
@@ -47,6 +48,7 @@ executable calculator-exe
   build-depends:
       base >=4.7 && <5
     , calculator
+    , megaparsec >= 5.0.0 && <= 8.0.0
   default-language: Haskell2010
 
 test-suite calculator-test
