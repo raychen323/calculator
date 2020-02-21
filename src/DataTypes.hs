@@ -3,8 +3,10 @@ module DataTypes where
 {-# OPTIONS_GHC -Wall #-}
 
 data Expression
-    = Reference String
-    | Application (Expression) [Expression]
+    = Const Float
+    | BinOp String Expression Expression
+    | Var String
+    | UnOp String Expression
     deriving Show
 
 data Law
