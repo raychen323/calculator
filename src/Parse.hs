@@ -16,17 +16,16 @@ type Parser = ParsecT Void String Identity
 parseExpression = space *> ((string "(") *> parseExpression <* (string ")")
                         <|> Con <$> digits
                         <|> try parseUnOp
+                        -- <|> try parseBinOp
                         <|> Var <$> parseString) <* space
-
--- parseExpression2 = parseUnOp <|> parseString
 
 -- --Gets characters until it hits a bad character as defined in f
 parseString :: Parser String
 parseString = space *> (some (satisfy f)) <*space
     where f x = not (elem x "\t\r {}()[].=:")
 
-parseUnOp = UnOp <$> parseString <*> (parseExpression <|>
-            Var <$> parseString)
+parseUnOp = UnOp <$> parseString <*> (parseExpression)
+-- parseBinOp = BinOp <$> parseString
 
 digits :: Parser Int
 digits = do ds <- some digit
@@ -36,6 +35,3 @@ digits = do ds <- some digit
 digit :: Parser Int
 digit = cvt <$> satisfy isDigit  
         where cvt d = fromEnum d - fromEnum '0'
-
--- parseBinOp = BinOp <$> parseExpression
--- Need to find way to do infix parsing
