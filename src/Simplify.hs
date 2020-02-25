@@ -2,9 +2,11 @@ module Simplify where
 
 import DataTypes
 
+type Equation = (Expression,Expression)
+
 calculate :: [Law] -> Expression -> Calculation 
 calculate laws e = Calc e (manyStep rws e)   
-    where rws e = [Step name e’ | Law name eq <- laws, e’ <- rewrites eqn e] 
+    where rws e = [Step name f | Law name eq <- laws, f <- rewrites eqn e] 
 
 manyStep :: (Expression -> [Step]) -> Expression -> [Step]
 manyStep rws e  
@@ -34,9 +36,9 @@ alignments :: (Expression,Expression) -> [([Expression],Expression)]
 alignments (Compose as, Compose bs) 
  = [zip as (map Compose bss) | bss <- splitsN (length as) bs] 
 
- matchA :: (Expression, Expression) -> [Subst] 
- matchA (Var v, e) = [unitSub v e] 
- matchA (Con k1 es1, Compose [Con k2 es2]) | k1 ==k2 
+matchA :: (Expression, Expression) -> [Subst] 
+matchA (Var v, e) = [unitSub v e] 
+matchA (Con k1 es1, Compose [Con k2 es2]) | k1 ==k2 
   = combine (map match (zip es1 es2))
 
 type Subst = [(VarName,Expression)] 
@@ -52,9 +54,9 @@ applyA sub (Var v) = deCompose (binding sub v)
 applyA sub (Con k es) = [Con k (map (apply sub) es)] 
 
 binding :: Subst -> VarName -> Expression 
-binding ((v’,e):sub) v | v’ == v = e                                  
+binding ((v',e):sub) v | v' == v = e                                  
     | otherwise = binding sub v 
-binding [] v = error “Could not find binding”
+binding [] v = error "Could not find binding"
 
 combine :: [[Subst]] -> [Subst]
 combine = filterUnifiable . cp 
@@ -68,4 +70,4 @@ unify s1 s2 = if compatible s1 s2 then [s1 ++ s2] else []
 
 compatible :: Subst -> Subst -> Bool 
 compatible sub1 sub2   
-    = and [e1 == e2 | (v1, e1) <- sub1, (v2, e2) <-sub, v1==v2)
+    = and [e1 == e2 | (v1, e1) <- sub1, (v2, e2) <-sub, v1==v2]

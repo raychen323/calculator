@@ -1,3 +1,4 @@
+-- Referenced https://markkarpov.com/tutorial/megaparsec.html
 module Parse where
 
 import DataTypes
@@ -12,18 +13,20 @@ import Data.Char
 type Parser = ParsecT Void String Identity
 
 --Parses an expression into different kinds of expressions
-parseExpression = space *> try ((string "(") *> parseExpression <* (string ")")
-                        <|> Const <$> digits
-                        <|> (parseUnOp)
-                        <|> return (Const 1)) <* space
+parseExpression = space *> ((string "(") *> parseExpression <* (string ")")
+                        <|> Con <$> digits
+                        <|> try parseUnOp
+                        <|> Var <$> parseString) <* space
 
+-- parseExpression2 = parseUnOp <|> parseString
 
 -- --Gets characters until it hits a bad character as defined in f
 parseString :: Parser String
 parseString = space *> (some (satisfy f)) <*space
     where f x = not (elem x "\t\r {}()[].=:")
 
-parseUnOp = UnOp <$> parseString <*> parseExpression
+parseUnOp = UnOp <$> parseString <*> (parseExpression <|>
+            Var <$> parseString)
 
 digits :: Parser Int
 digits = do ds <- some digit
@@ -34,5 +37,5 @@ digit :: Parser Int
 digit = cvt <$> satisfy isDigit  
         where cvt d = fromEnum d - fromEnum '0'
 
--- parseBinOp = BinOp <$> parseExpression <*
+-- parseBinOp = BinOp <$> parseExpression
 -- Need to find way to do infix parsing
