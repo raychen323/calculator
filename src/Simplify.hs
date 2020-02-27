@@ -19,14 +19,6 @@ type Equation = (Expression,Expression)
 -- -- rewrites eqn (Compose as)
 -- --    = map Compose (rewriteSeg eqn as ++ anyOne (rewritesA eqn) as) 
 
--- rewrites eqn (BinOp op expr1 expr2)
---     = BinOp op (rewritesSeg eqn [expr1]) (rewriteSeg eqn [expr2])
--- rewrites eqn (UnOp op expr)
---     = UnOp op (rewriteSeg eqn [expr])
--- rewrites eqn expr
---     = expr
-
-
 -- rewritesA eqn (Var v) = [] 
 -- rewritesA eqn (Con k es) 
 --   = map (Con k) (anyOne (rewrites eqn) es)
@@ -37,22 +29,16 @@ type Equation = (Expression,Expression)
 --    | (as1,as2,as3) <- split3 as      
 --    , subst <- match (e1, Compose as2) ] 
 
-
--- matchA :: (Expression, Expression) -> [Subst] 
--- matchA (Var v, e) = [unitSub v e] 
--- matchA (Con k1 es1, Compose [Con k2 es2]) | k1 ==k2 
---   = combine (map match (zip es1 es2))
-
-match :: Expr -> Expr -> [Subst]
+match :: Expression -> Expression -> [Subst]
 match (Var x) y = [unitSub x y]
-match (Con _)@x y = []
+match x@(Con _) y = []
 match (BinOp oper expr1 expr2) (BinOp oper' expr1' expr2') = if oper == oper' then
     let match1 = match expr1 expr1'
         match2 = match expr2 expr2'
-        return [ unitSub x y | x<-[a,b], y<-[c,d] ]
+        in match1 ++ match2
     else []
 match (UnOp oper expr) (UnOp oper' expr') = if oper == oper' then
-    return (match expr expr') else []
+    match expr expr' else []
                                   
 
 type Subst = [(VarName,Expression)]
@@ -60,7 +46,7 @@ type Subst = [(VarName,Expression)]
 
 
 apply :: Subst -> Expression -> Expression
-apply sub (Con _)@x = x
+apply sub x@(Con _) = x
 apply sub (Var v) = binding sub v
 apply sub (BinOp oper expr1 expr2) = BinOp oper (apply sub expr1) (apply sub expr2)
 apply sub (UnOp oper expr1) = UnOp oper (apply sub expr1)
