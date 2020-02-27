@@ -16,8 +16,16 @@ manyStep rws e
  where steps = rws e 
 
 rewrites :: Equation -> Expression -> [Expression] 
-rewrites eqn (Compose as)
-   = map Compose (rewriteSeg eqn as ++ anyOne (rewritesA eqn) as) 
+-- rewrites eqn (Compose as)
+--    = map Compose (rewriteSeg eqn as ++ anyOne (rewritesA eqn) as) 
+
+rewrites eqn (BinOp op expr1 expr2)
+    = BinOp op (rewritesSeg eqn [expr1]) (rewriteSeg eqn [expr2])
+rewrites eqn (UnOp op expr)
+    = UnOp op (rewriteSeg eqn [expr])
+rewrites eqn expr
+    = expr
+
 
 rewritesA eqn (Var v) = [] 
 rewritesA eqn (Con k es) 
@@ -33,8 +41,12 @@ match :: (Expression,Expression) -> [Subst]
 match = concatMap (combine . map matchA) . alignments 
 
 alignments :: (Expression,Expression) -> [([Expression],Expression)] 
-alignments (Compose as, Compose bs) 
- = [zip as (map Compose bss) | bss <- splitsN (length as) bs] 
+-- alignments (Compose as, Compose bs) 
+--  = [zip as (map Compose bss) | bss <- splitsN (length as) bs] 
+alignments (BinOp op expr1 expr2, BinOp op expr1 expr2)
+    = []
+
+
 
 matchA :: (Expression, Expression) -> [Subst] 
 matchA (Var v, e) = [unitSub v e] 
