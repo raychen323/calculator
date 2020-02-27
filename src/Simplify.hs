@@ -27,7 +27,17 @@ type Equation = (Expression,Expression)
 -- rewritesSeg (e1,e2) as  
 --  = [as1 ++ deCompose (apply subst e2) ++ as3      
 --    | (as1,as2,as3) <- split3 as      
---    , subst <- match (e1, Compose as2) ] 
+--    , subst <- match (e1, Compose as2) ]
+
+
+
+rewrites :: Equation -> Expression -> [Expression]
+rewrites eqn (BinOp oper expr1 expr2) = [BinOp oper a' b | a' <- rewrites eqn expr1] ++ [BinOp oper a b' | b' <- rewrites eqn expr2]
+
+rewrites eqn (UnOp oper expr) = [UnOp oper (rewrites eqn expr1)]
+
+rewrites eqn (Var v) = match apply v
+
 
 match :: Expression -> Expression -> [Subst]
 match (Var x) y = [unitSub x y]
