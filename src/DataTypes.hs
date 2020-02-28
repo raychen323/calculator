@@ -12,6 +12,6 @@ data Expression
 data Law
     = Law String Expression Expression
 
-data Step = Step String Expression
+data Step = Step String Expression deriving Show
 
-data Calculation = Calc Expression [Step]
+data Calculation = Calc Expression [Step] deriving Show
