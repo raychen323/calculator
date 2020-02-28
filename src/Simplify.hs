@@ -6,7 +6,7 @@ type Equation = (Expression,Expression)
 
 calculate :: [Law] -> Expression -> Calculation 
 calculate laws e = Calc e (manyStep rws e)   
-    where rws e = [Step name f | Law name eq <- laws, f <- rewrites eqn e] 
+    where rws e = [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e] 
 
 manyStep :: (Expression -> [Step]) -> Expression -> [Step]
 manyStep rws e  
@@ -61,7 +61,10 @@ binding ((v',e):sub) v | v' == v = e
 binding [] v = error "Could not find binding"
 
 combine :: [[Subst]] -> [Subst]
-combine = filterUnifiable . cp b
+combine = filterUnifiable . cp
+
+cp (xs:xss) = [x:ys | x <- xs, ys <- cp xss]
+
 filterUnifiable = concatMap unifyAll 
 unifyAll :: [Subst] -> [Subst] 
 unifyAll = foldr f []   
@@ -72,4 +75,4 @@ unify s1 s2 = if compatible s1 s2 then [s1 ++ s2] else []
 
 compatible :: Subst -> Subst -> Bool 
 compatible sub1 sub2   
-    = and [e1 == e2 | (v1, e1) <- sub1, (v2, e2) <-sub, v1==v2]
+    = and [e1 == e2 | (v1, e1) <- sub1, (v2, e2) <-sub2, v1==v2]

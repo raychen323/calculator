@@ -7,11 +7,11 @@ data Expression
     | BinOp String Expression Expression
     | Var String
     | UnOp String Expression
-    deriving Show
+    deriving (Show, Eq)
 
 data Law
     = Law String Expression Expression
 
-data Step = Step Law Expression
+data Step = Step String Expression
 
 data Calculation = Calc Expression [Step]
