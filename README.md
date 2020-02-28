@@ -1,10 +1,6 @@
 # calculator
 Austin Zhang and Raymond Chen
 
-Our preliminary data structures are in the Data.hs file under the calculator folder.
-
-We're planning on using MegaParsec to parse.
-
-We've also come up with preliminary data types, based on the ones we've covered in lecture.
+In order to run the program, need to first `cd src`, and then can run `ghci Simplify.hs`, `ghci Parse.hs` or `ghci TryCalculating.hs`
 
 Received help from Le Change in TA office hours.
