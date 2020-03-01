@@ -27,17 +27,24 @@ rewrites eqn x = rewritesHelper eqn x
 rewritesHelper (e1, e2) exp = [apply sub e2 | sub <- match e1 exp]
 
 
+crossProduct :: [Subst] -> [Subst] -> [Subst]
+crossProduct [] _ = []
+crossProduct (x:xs) ys = crossProductHelper x ys ++ crossProduct xs ys
+
+crossProductHelper x [] = []
+crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
+
 match :: Expression -> Expression -> [Subst]
 match (Var x) y = [unitSub x y]
 match x@(Con _) y = []
 match (BinOp oper expr1 expr2) (BinOp oper' expr1' expr2') = if oper == oper' then
     let match1 = match expr1 expr1'
         match2 = match expr2 expr2'
-        in match1 ++ match2
+        in crossProduct match1 match2
     else []
 match (UnOp oper expr) (UnOp oper' expr') = if oper == oper' then
     match expr expr' else []
-                                  
+match _ _ = []                       
 
 type Subst = [(VarName,Expression)]
 

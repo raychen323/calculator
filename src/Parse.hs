@@ -19,9 +19,9 @@ type Parser = ParsecT Void String Identity
 
 -- Parses an expression into different kinds of expressions
 parseExpression = space *> ((string "(") *> parseExpression <* (string ")")
-                        <|> Con <$> digits
                         <|> try parseBinOp
                         <|> try parseUnOp
+                        <|> Con <$> digits
                         <|> Var <$> parseString) <* space
 
 parens :: Parser a -> Parser a
