@@ -10,7 +10,7 @@ data Expression
     deriving (Show, Eq)
 
 data Law
-    = Law String Expression Expression
+    = Law String Expression Expression deriving Show
 
 data Step = Step String Expression deriving Show
 

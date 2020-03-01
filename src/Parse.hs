@@ -18,11 +18,11 @@ import qualified Text.Megaparsec.Char.Lexer as L
 type Parser = ParsecT Void String Identity
 
 -- Parses an expression into different kinds of expressions
-parseExpression = space *> ((string "(") *> parseExpression <* (string ")")
-                        <|> try parseBinOp
+parseExpression = space *> (try parseBinOp
                         <|> try parseUnOp
                         <|> Con <$> digits
-                        <|> Var <$> parseString) <* space
+                        <|> Var <$> parseString
+                        <|> (string "(") *> parseExpression <* (string ")")) <* space
 
 parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
@@ -31,8 +31,8 @@ parseBinHelper :: Parser Expression
 parseBinHelper = choice
   [ parens parseBinOp
   , try parseUnOp
-  , Var <$> parseString
   , Con <$> digits
+  , Var <$> parseString
   ]
 
 lexeme :: Parser a -> Parser a
@@ -66,7 +66,11 @@ postfix name f = Postfix (f <$ symbol name)
 
 operatorTable :: [[Operator Parser Expression]]
 operatorTable =
-  [ [ binary "*" (BinOp "Mult")
+  [ 
+    [prefix "-" (UnOp "Neg")]
+  , [ binary "^" (BinOp "Pow")
+    ]
+  , [ binary "*" (BinOp "Mult")
     , binary "/" (BinOp "Div")
     ]
   , [ binary "+" (BinOp "Sum")
