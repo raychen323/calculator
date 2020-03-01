@@ -36,7 +36,9 @@ crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
 
 match :: Expression -> Expression -> [Subst]
 match (Var x) y = [unitSub x y]
-match x@(Con _) y = []
+match (Con a) (Con b) = if a == b then
+        [unitSub "doNotUse" (Con a)]
+    else []
 match (BinOp oper expr1 expr2) (BinOp oper' expr1' expr2') = if oper == oper' then
     let match1 = match expr1 expr1'
         match2 = match expr2 expr2'

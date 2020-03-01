@@ -19,7 +19,7 @@ type Parser = ParsecT Void String Identity
 
 -- Parses an expression into different kinds of expressions
 parseExpression = space *> (try parseBinOp
-                        <|> try parseUnOp
+                        <|> try parseUnOp 
                         <|> Con <$> digits
                         <|> Var <$> parseString
                         <|> (string "(") *> parseExpression <* (string ")")) <* space
@@ -52,7 +52,7 @@ parseString :: Parser String
 parseString = space *> (some (satisfy f)) <*space
     where f x = not (elem x "\t\r {}()[].=:+-*/^")
 
-parseUnOp = UnOp <$> parseString <*> (parseExpression)
+parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string ")")
 
 parseBinOp :: Parser Expression
 parseBinOp = makeExprParser parseBinHelper operatorTable
