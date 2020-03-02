@@ -35,8 +35,8 @@ crossProductHelper x [] = []
 crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
 
 match :: Expression -> Expression -> [Subst]
-match (Con a) (Var "const") = [unitSub "doNotUse" (Con a)]
-match (Var x) (Var "const") = []
+match (Var "const") (Con a) = [unitSub "doNotUse" (Con a)]
+match (Var "const") _ = []
 match (Var x) y = [unitSub x y]
 match (Con a) (Con b) = if a == b then
         [unitSub "doNotUse" (Con a)]
