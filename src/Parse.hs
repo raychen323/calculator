@@ -28,12 +28,12 @@ parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
 
 parseBinHelper :: Parser Expression
-parseBinHelper = choice
+parseBinHelper = space *> choice
   [ parens parseBinOp
   , try parseUnOp
   , Con <$> digits
   , Var <$> parseString
-  ]
+  ] <* space
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc
