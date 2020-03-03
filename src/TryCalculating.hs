@@ -9,7 +9,7 @@ import Text.Megaparsec
 prettyTest = putStrLn(show (pretty(test)))
 
 test = calculate laws output where
-    Right output = parse parseExpression "" "derive(50*x)" --"derive (sin(x)*(x^(1/2)))"
+    Right output = parse parseExpression "" "derive(50/x)" --"derive (sin(x)*(x^(1/2)))"
 
 laws :: [Law]
 laws = [
