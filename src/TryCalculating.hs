@@ -9,11 +9,9 @@ import Text.Megaparsec
 prettyTest = putStrLn(show (pretty(test)))
 
 test = calculate laws output where
-    Right output = parse parseExpression "" "derive(3*(x*2) + (x*2)*3)" --"derive (sin(x)*(x^(1/2)))"
+    Right output = parse parseExpression "" "derive(x^2)" --"derive (sin(x)*(x^(1/2)))"
 
-pruneTest = Simplify.match (UnOp "derive" (BinOp "Mult" (Var "a") (Var "b"))) (UnOp "derive" (BinOp "Mult" (Con 6) (BinOp "Mult" (Var "x") (Con 2))))
-pruneTestRee = pruneHelperHelper ("x",Con 3) [("x",Con 3),("y",BinOp "Pow" (Var "x") (Con 2)),("z",Con 3),("y",BinOp "Pow" (Var "x") (Con 2))]
-
+matchTest = Simplify.match (BinOp "Mult" (Var "x") (BinOp "Div" (Con 1) (Var "x"))) (BinOp "Mult" (Con 2) (BinOp "Div" (Con 1) (Var "x")))
 laws = [
         -- general
     Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
@@ -34,5 +32,5 @@ laws = [
     ,   Law "power" (UnOp "derive" (BinOp "Pow" (Var "x") (Var "y"))) (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "y")) (UnOp "derive" (BinOp "Mult" (Var "y") (UnOp "ln" (Var "x")))))
     ,   Law "multiplication" (UnOp "derive" (BinOp "Mult" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b"))))
     ,   Law "const" (UnOp "derive" (Var "const")) (Con 0)
-    -- ,   Law "self" (UnOp "derive" (Var "x")) (Con 1)
+    ,   Law "self" (UnOp "derive" (Var "x")) (Con 1)
         ]

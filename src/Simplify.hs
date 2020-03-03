@@ -63,9 +63,9 @@ pruneHelperHelper :: (String , Expression) -> (Subst) -> Bool
 pruneHelperHelper _ [] = True
 pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then 
                                                     if (exp1 == exp2) 
-                                                        then (True && pruneHelperHelper (var2,exp2) ys)
+                                                        then (True && pruneHelperHelper (var1,exp1) ys)
                                                             else False
-                                                else (True && pruneHelperHelper (var2,exp2) ys)
+                                                else (True && pruneHelperHelper (var1,exp1) ys)
 
 
 match :: Expression -> Expression -> [Subst]
