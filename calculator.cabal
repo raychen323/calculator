@@ -29,7 +29,9 @@ library
   exposed-modules:
       DataTypes,
       Parse,
-      Simplify
+      Simplify,
+      Presentable,
+      TryCalculating
   other-modules:
       Paths_calculator
   hs-source-dirs:
