@@ -29,6 +29,7 @@ laws = [
     ,   Law "self div" (BinOp "Mult" (Var "x") (BinOp "Div" (Con 1) (Var "x"))) (Con 1)
     ,   Law "self div" (BinOp "Mult" (BinOp "Div" (Con 1) (Var "x")) (Var "x")) (Con 1)
     ,   Law "power inverse" (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "p")) (BinOp "Div" (Var "const") (Var "x"))) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (BinOp "Min" (Var "p") (Con 1))))
+    ,   Law "add powers" (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "p")) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (Var "a")))) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (BinOp "Sum" (Var "p") (Var "a"))))
     -- derivative laws
     ,   Law "sin" (UnOp "derive" (UnOp "sin" (Var "x"))) (BinOp "Mult" (UnOp "cos" (Var "x")) (UnOp "derive" (Var "x")))
     ,   Law "cos" (UnOp "derive" (UnOp "cos" (Var "x"))) (BinOp "Mult" (UnOp "Neg" (UnOp "sin" (Var "x"))) (UnOp "derive" (Var "x")))
