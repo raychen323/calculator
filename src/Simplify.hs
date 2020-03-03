@@ -75,7 +75,7 @@ pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then
 
 --Matches laws to expressions
 match :: Expression -> Expression -> [Subst]
-match (Var "const") (Con a) = [unitSub "doNotUse" (Con a)]
+match (Var "const") (Con a) = [unitSub "const" (Con a)]
 match (Var "const") _ = []
 match (Var x) y = [unitSub x y]
 match (Con a) (Con b) = if a == b then
