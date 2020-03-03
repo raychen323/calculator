@@ -21,6 +21,7 @@ laws = [
     ,   Law "identity" (BinOp "Sum" (Var "x") (Con 0)) (Var "x")
     ,   Law "identity" (BinOp "Sum" (Con 0) (Var "x")) (Var "x")
     ,   Law "identity" (BinOp "Pow" (Var "x") (Con 1)) (Var "x")
+    ,   Law "power" (BinOp "Div" (Var "const") (Var "x")) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (UnOp "Neg" (Con 1.0))))
     ,   Law "distributive" (BinOp "Sum" (BinOp "Mult" (Var "x") (Var "y")) (BinOp "Mult" (Var "z") (Var "y"))) (BinOp "Mult" (BinOp "Sum" (Var "x") (Var "z")) (Var "y"))
     ,   Law "duplicate" (BinOp "Sum" (Var "x") (Var "x")) (BinOp "Mult" (Con 2) (Var "x"))
     ,   Law "mult by inv" (BinOp "Mult" (Var "x") (BinOp "Div" (Con 1) (Var "y"))) (BinOp "Div" (Var "x") (Var "y"))

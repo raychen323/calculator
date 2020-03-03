@@ -17,6 +17,7 @@ constRules (BinOp "Mult" (Con x) (Con y)) = Con (x*y)
 constRules (BinOp "Div" (Con x) (Con y)) = Con (x/y)
 constRules (BinOp "Pow" (Con x) (Con y)) = Con (x**y)
 constRules (BinOp oper x y) = BinOp oper (constRules x) (constRules y)
+constRules (UnOp "Neg" (Con x)) = Con (-x)
 constRules (UnOp oper x) = UnOp oper (constRules x)
 constRules x = x
 
