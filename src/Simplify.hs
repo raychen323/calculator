@@ -4,11 +4,12 @@ import DataTypes
 
 type Equation = (Expression,Expression)
 
+--Main method as long as there exists a next step, adds to the array
 calculate :: [Law] -> Expression -> Calculation 
 calculate laws e = Calc e (manyStep rws e)   
     where rws e = (constStep e) ++ [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e] 
 
-
+--Rules used to simplify constants
 constRules :: Expression -> Expression
 constRules (BinOp "Sum" (Con x) (Con y)) = Con (x+y)
 constRules (BinOp "Min" (Con x) (Con y)) = Con (x-y)
@@ -19,6 +20,7 @@ constRules (BinOp oper x y) = BinOp oper (constRules x) (constRules y)
 constRules (UnOp oper x) = UnOp oper (constRules x)
 constRules x = x
 
+--Based off manyStep
 constStep e = [Step "const operation" f | f <- (next constRules e)]
     where next constRules e | (e == (constRules e)) = []
                             | otherwise = [constRules e]
@@ -41,7 +43,7 @@ rewrites eqn x = rewritesHelper eqn x
 
 rewritesHelper (e1, e2) exp = [apply sub e2 | sub <- prune(match e1 exp)]
 
-
+--Takes cartesian product of two arrays of types substitution
 crossProduct :: [Subst] -> [Subst] -> [Subst]
 crossProduct [] _ = []
 crossProduct (x:xs) ys = crossProductHelper x ys ++ crossProduct xs ys
@@ -49,10 +51,12 @@ crossProduct (x:xs) ys = crossProductHelper x ys ++ crossProduct xs ys
 crossProductHelper x [] = []
 crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
 
+--Removes substitutions where a var has a unitSub with two different expressions
 prune :: [Subst] -> [Subst]
 prune [] = []
 prune(x:xs) = (pruneHelper x []) ++ prune(xs)
 
+--Searches each element in the Subst array and makes sure it's not duplicated
 pruneHelper :: Subst -> Subst -> [Subst]
 pruneHelper [] _ = []
 pruneHelper (y:[]) rol = [rol ++ [y]]
@@ -67,7 +71,7 @@ pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then
                                                             else False
                                                 else (True && pruneHelperHelper (var1,exp1) ys)
 
-
+--Matches laws to expressions
 match :: Expression -> Expression -> [Subst]
 match (Var "const") (Con a) = [unitSub "doNotUse" (Con a)]
 match (Var "const") _ = []

@@ -24,9 +24,11 @@ parseExpression = space *> (try parseBinOp
                         <|> Var <$> parseString
                         <|> (string "(") *> parseExpression <* (string ")")) <* space
 
+-- Removes parentheses
 parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
 
+--Helper for binop parser
 parseBinHelper :: Parser Expression
 parseBinHelper = space *> choice
   [ parens parseBinOp
@@ -35,9 +37,11 @@ parseBinHelper = space *> choice
   , Var <$> parseString
   ] <* space
 
+--Removes spaces
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc
 
+-- Parses out comments
 lineComment :: Parser ()
 lineComment = L.skipLineComment "#"
 
@@ -54,6 +58,7 @@ parseString = space *> (some (satisfy f)) <*space
 
 parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string ")")
 
+--Parses infix bin operations
 parseBinOp :: Parser Expression
 parseBinOp = makeExprParser parseBinHelper operatorTable
 
@@ -64,6 +69,7 @@ prefix, postfix :: String -> (Expression -> Expression) -> Operator Parser Expre
 prefix  name f = Prefix  (f <$ symbol name)
 postfix name f = Postfix (f <$ symbol name)
 
+--Used to declare operations
 operatorTable :: [[Operator Parser Expression]]
 operatorTable =
   [ 
@@ -78,12 +84,13 @@ operatorTable =
     ]
   ]
 
-
+--Parses multiple digits
 digits :: Parser Int
 digits = do ds <- some digit
             return (foldl1 shiftl ds)         
             where shiftl m n = 10*m+n
 
+--Parses single digits
 digit :: Parser Int
 digit = cvt <$> satisfy isDigit  
         where cvt d = fromEnum d - fromEnum '0'
