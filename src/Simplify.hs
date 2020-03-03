@@ -77,8 +77,11 @@ pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then
 match :: Expression -> Expression -> [Subst]
 match (Var "const") (Con a) = [unitSub "const" (Con a)]
 match (Var "const") _ = []
+
 match (UnOp "derive" (Var _)) (UnOp "derive" (BinOp _ _ _)) = []
 match (UnOp "derive" (Var _)) (UnOp "derive" (UnOp _ _)) = []
+match (UnOp "derive" (Var x)) (UnOp "derive" (Var y)) | (x == y) = [unitSub x (Var y)]
+                                                      | otherwise = []
 
 match (Var x) y = [unitSub x y]
 match (Con a) (Con b) = if a == b then
