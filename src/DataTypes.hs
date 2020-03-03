@@ -14,4 +14,8 @@ data Law
 
 data Step = Step String Expression deriving Show
 
+data PrettyStep = PrettyStep String String deriving Show
+
 data Calculation = Calc Expression [Step] deriving Show
+
+data PrettyCalculation = PrettyCalc Expression [PrettyStep] deriving Show

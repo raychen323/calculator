@@ -6,7 +6,28 @@ type Equation = (Expression,Expression)
 
 calculate :: [Law] -> Expression -> Calculation 
 calculate laws e = Calc e (manyStep rws e)   
-    where rws e = [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e] 
+    where rws e = (constStep e) ++ [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e] 
+
+
+constRules :: Expression -> Expression
+constRules (BinOp "Sum" (Con x) (Con y)) = Con (x+y)
+constRules (BinOp "Min" (Con x) (Con y)) = Con (x-y)
+constRules (BinOp "Mult" (Con x) (Con y)) = Con (x*y)
+constRules (BinOp "Div" (Con x) (Con y)) = Con (x-y)
+constRules (BinOp "Pow" (Con x) (Con y)) = Con (x^y)
+constRules (BinOp oper x y) = BinOp oper (constRules x) (constRules y)
+constRules (UnOp oper x) = UnOp oper (constRules x)
+constRules x = x
+
+constStep e = [Step "const operation" f | f <- (next constRules e)]
+    where next constRules e | (e == (constRules e)) = []
+                            | otherwise = [constRules e]
+    -- where
+        -- let next = constRules e
+        -- if e == next
+            -- []
+        -- else
+            -- [Step "const operation" next]
 
 manyStep :: (Expression -> [Step]) -> Expression -> [Step]
 manyStep rws e  
@@ -24,7 +45,7 @@ rewrites eqn x = rewritesHelper eqn x
 
 
 
-rewritesHelper (e1, e2) exp = [apply sub e2 | sub <- match e1 exp]
+rewritesHelper (e1, e2) exp = [apply sub e2 | sub <- prune(match e1 exp)]
 
 
 crossProduct :: [Subst] -> [Subst] -> [Subst]
@@ -34,9 +55,30 @@ crossProduct (x:xs) ys = crossProductHelper x ys ++ crossProduct xs ys
 crossProductHelper x [] = []
 crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
 
+prune :: [Subst] -> [Subst]
+prune [] = []
+prune(x:xs) = (pruneHelper x []) ++ prune(xs)
+
+pruneHelper :: Subst -> Subst -> [Subst]
+pruneHelper [] _ = []
+pruneHelper (y:[]) rol = [rol]
+pruneHelper (y:ys) rol | (pruneHelperHelper y ys) = (pruneHelper ys (rol++[y]))
+                       | otherwise = []
+
+pruneHelperHelper :: (String , Expression) -> (Subst) -> Bool
+pruneHelperHelper _ [] = True
+pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then 
+                                                                            if (exp1 == exp2) 
+                                                                                then (True && pruneHelperHelper (var2,exp2) ys)
+                                                                                    else False
+                                                                        else False
+
+
 match :: Expression -> Expression -> [Subst]
 match (Var "const") (Con a) = [unitSub "doNotUse" (Con a)]
 match (Var "const") _ = []
+match (Var x) (Var y) | x==y = [unitSub "x" (Var x)]
+                      | otherwise = [] 
 match (Var x) y = [unitSub x y]
 match (Con a) (Con b) = if a == b then
         [unitSub "doNotUse" (Con a)]

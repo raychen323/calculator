@@ -2,6 +2,8 @@ module Presentable where
 
 import DataTypes
 
+pretty (Calc expression steps) = PrettyCalc expression [ PrettyStep stepName (present e) | Step stepName e <- steps]
+
 present (Con a) = show a
 present (Var x) = x
 present (UnOp op expr) = presentOp(op) ++ "(" ++ present(expr) ++ ")"
