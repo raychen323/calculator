@@ -20,7 +20,7 @@ type Parser = ParsecT Void String Identity
 parseExpression :: Parser Expression
 parseExpression = space *> (try parseBinOp
                         <|> try parseUnOp 
-                        <|> Con <$> digits
+                        <|> Con <$> float
                         <|> Var <$> parseString
                         <|> (string "(") *> parseExpression <* (string ")")) <* space
 
@@ -33,7 +33,7 @@ parseBinHelper :: Parser Expression
 parseBinHelper = space *> choice
   [ parens parseBinOp
   , try parseUnOp
-  , Con <$> digits
+  , Con <$> float
   , Var <$> parseString
   ] <* space
 
@@ -85,14 +85,5 @@ operatorTable =
     ]
   ]
 
---Parses multiple digits
-digits :: Parser Int
-digits = do ds <- some digit
-            return (foldl1 shiftl ds)         
-            where shiftl m n = 10*m+n
-
---Parses single digits
-digit :: Parser Int
-digit = cvt <$> satisfy isDigit  
-        where cvt d = fromEnum d - fromEnum '0'
-
+float = space *> (try (L.float)
+        <|> L.decimal) <* space

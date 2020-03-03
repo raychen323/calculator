@@ -3,7 +3,7 @@ module DataTypes where
 {-# OPTIONS_GHC -Wall #-}
 
 data Expression
-    = Con Int
+    = Con Float
     | BinOp String Expression Expression
     | Var String
     | UnOp String Expression
