@@ -10,7 +10,6 @@ import Data.Void(Void)
 import Control.Monad (void)
 import Data.Functor.Identity (Identity)
 import Data.Char
-import Data.String
 import Control.Monad.Combinators.Expr
 import qualified Text.Megaparsec.Char.Lexer as L
 
@@ -18,6 +17,7 @@ import qualified Text.Megaparsec.Char.Lexer as L
 type Parser = ParsecT Void String Identity
 
 -- Parses an expression into different kinds of expressions
+parseExpression :: Parser Expression
 parseExpression = space *> (try parseBinOp
                         <|> try parseUnOp 
                         <|> Con <$> digits
@@ -56,6 +56,7 @@ parseString :: Parser String
 parseString = space *> (some (satisfy f)) <*space
     where f x = not (elem x "\t\r {}()[].=:+-*/^")
 
+parseUnOp :: Parser Expression
 parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string ")")
 
 --Parses infix bin operations

@@ -7,7 +7,7 @@ type Equation = (Expression,Expression)
 --Main method as long as there exists a next step, adds to the array
 calculate :: [Law] -> Expression -> Calculation 
 calculate laws e = Calc e (manyStep rws e)   
-    where rws e = (constStep e) ++ [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e] 
+    where rws e' = (constStep e') ++ [Step name f | Law name expr1 expr2 <- laws, f <- rewrites (expr1, expr2) e'] 
 
 --Rules used to simplify constants
 constRules :: Expression -> Expression
@@ -21,15 +21,16 @@ constRules (UnOp oper x) = UnOp oper (constRules x)
 constRules x = x
 
 --Based off manyStep
-constStep e = [Step "const operation" f | f <- (next constRules e)]
-    where next constRules e | (e == (constRules e)) = []
-                            | otherwise = [constRules e]
+constStep :: Expression -> [Step]
+constStep e = [Step "const operation" f | f <- (next e)]
+    where next e' | (e' == (constRules e')) = []
+                            | otherwise = [constRules e']
 
 manyStep :: (Expression -> [Step]) -> Expression -> [Step]
 manyStep rws e  
  = case steps of
     [] -> []        
-    (o@(Step _ e) : _) -> o:manyStep rws e   
+    (o@(Step _ e') : _) -> o:manyStep rws e'   
  where steps = rws e 
 
 rewrites :: Equation -> Expression -> [Expression]
@@ -40,15 +41,16 @@ rewrites eqn (UnOp oper expr) = (rewritesHelper eqn (UnOp oper expr)) ++ [UnOp o
 rewrites eqn x = rewritesHelper eqn x
 
 
-
-rewritesHelper (e1, e2) exp = [apply sub e2 | sub <- prune(match e1 exp)]
+rewritesHelper :: (Expression, Expression) -> Expression -> [Expression]
+rewritesHelper (e1, e2) expr = [apply sub e2 | sub <- prune(match e1 expr)]
 
 --Takes cartesian product of two arrays of types substitution
 crossProduct :: [Subst] -> [Subst] -> [Subst]
 crossProduct [] _ = []
 crossProduct (x:xs) ys = crossProductHelper x ys ++ crossProduct xs ys
 
-crossProductHelper x [] = []
+crossProductHelper :: Subst -> [Subst] -> [Subst]
+crossProductHelper _ [] = []
 crossProductHelper x (y:ys) = [x++y] ++ crossProductHelper x ys
 
 --Removes substitutions where a var has a unitSub with two different expressions
@@ -95,7 +97,7 @@ type Subst = [(VarName,Expression)]
 
 
 apply :: Subst -> Expression -> Expression
-apply sub x@(Con _) = x
+apply _ x@(Con _) = x
 apply sub (Var v) = binding sub v
 apply sub (BinOp oper expr1 expr2) = BinOp oper (apply sub expr1) (apply sub expr2)
 apply sub (UnOp oper expr1) = UnOp oper (apply sub expr1)
@@ -109,14 +111,18 @@ unitSub v e = [(v,e)]
 binding :: Subst -> VarName -> Expression 
 binding ((v',e):sub) v | v' == v = e                                  
     | otherwise = binding sub v 
-binding [] v = error "Could not find binding"
+binding [] _ = error "Could not find binding"
 
 combine :: [[Subst]] -> [Subst]
 combine = filterUnifiable . cp
 
+cp :: [[a]] -> [[a]]
+cp [] = []
 cp (xs:xss) = [x:ys | x <- xs, ys <- cp xss]
 
+filterUnifiable :: [[Subst]] -> [Subst]
 filterUnifiable = concatMap unifyAll 
+
 unifyAll :: [Subst] -> [Subst] 
 unifyAll = foldr f []   
     where f sub subs = concatMap (unify sub) subs

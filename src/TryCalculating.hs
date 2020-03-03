@@ -9,9 +9,9 @@ import Text.Megaparsec
 prettyTest = putStrLn(show (pretty(test)))
 
 test = calculate laws output where
-    Right output = parse parseExpression "" "derive(x^2)" --"derive (sin(x)*(x^(1/2)))"
+    Right output = parse parseExpression "" "derive((x^2)+(x^2))" --"derive (sin(x)*(x^(1/2)))"
 
-matchTest = Simplify.match (BinOp "Mult" (Var "x") (BinOp "Div" (Con 1) (Var "x"))) (BinOp "Mult" (Con 2) (BinOp "Div" (Con 1) (Var "x")))
+laws :: [Law]
 laws = [
         -- general
     Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
@@ -20,7 +20,8 @@ laws = [
     ,   Law "identity" (BinOp "Mult" (Var "x") (Con 1)) (Var "x")
     ,   Law "identity" (BinOp "Sum" (Var "x") (Con 0)) (Var "x")
     ,   Law "identity" (BinOp "Sum" (Con 0) (Var "x")) (Var "x")
-    -- ,   Law "distributive" (BinOp "Sum" (BinOp "Mult" (Var "x") (Var "y")) (BinOp "Mult" (Var "z") (Var "y"))) (BinOp "Mult" (BinOp "Sum" (Var "x") (Var "z")) (Var "y"))
+    ,   Law "distributive" (BinOp "Sum" (BinOp "Mult" (Var "x") (Var "y")) (BinOp "Mult" (Var "z") (Var "y"))) (BinOp "Mult" (BinOp "Sum" (Var "x") (Var "z")) (Var "y"))
+    ,   Law "duplicate" (BinOp "Sum" (Var "x") (Var "x")) (BinOp "Mult" (Con 2) (Var "x"))
     ,   Law "self div" (BinOp "Div" (Var "x") (Var "x")) (Con 1)
     ,   Law "self div" (BinOp "Mult" (Var "x") (BinOp "Div" (Con 1) (Var "x"))) (Con 1)
     ,   Law "self div" (BinOp "Mult" (BinOp "Div" (Con 1) (Var "x")) (Var "x")) (Con 1)
