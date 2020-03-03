@@ -14,7 +14,7 @@ constRules :: Expression -> Expression
 constRules (BinOp "Sum" (Con x) (Con y)) = Con (x+y)
 constRules (BinOp "Min" (Con x) (Con y)) = Con (x-y)
 constRules (BinOp "Mult" (Con x) (Con y)) = Con (x*y)
-constRules (BinOp "Div" (Con x) (Con y)) = Con (x-y)
+constRules (BinOp "Div" (Con x) (Con y)) = Con (x/y)
 constRules (BinOp "Pow" (Con x) (Con y)) = Con (x**y)
 constRules (BinOp oper x y) = BinOp oper (constRules x) (constRules y)
 constRules (UnOp oper x) = UnOp oper (constRules x)
