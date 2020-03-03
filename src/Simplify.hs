@@ -22,12 +22,6 @@ constRules x = x
 constStep e = [Step "const operation" f | f <- (next constRules e)]
     where next constRules e | (e == (constRules e)) = []
                             | otherwise = [constRules e]
-    -- where
-        -- let next = constRules e
-        -- if e == next
-            -- []
-        -- else
-            -- [Step "const operation" next]
 
 manyStep :: (Expression -> [Step]) -> Expression -> [Step]
 manyStep rws e  
@@ -61,17 +55,17 @@ prune(x:xs) = (pruneHelper x []) ++ prune(xs)
 
 pruneHelper :: Subst -> Subst -> [Subst]
 pruneHelper [] _ = []
-pruneHelper (y:[]) rol = [rol]
+pruneHelper (y:[]) rol = [rol ++ [y]]
 pruneHelper (y:ys) rol | (pruneHelperHelper y ys) = (pruneHelper ys (rol++[y]))
                        | otherwise = []
 
 pruneHelperHelper :: (String , Expression) -> (Subst) -> Bool
 pruneHelperHelper _ [] = True
 pruneHelperHelper (var1,exp1) ((var2,exp2):ys) = if (var1 == var2) then 
-                                                                            if (exp1 == exp2) 
-                                                                                then (True && pruneHelperHelper (var2,exp2) ys)
-                                                                                    else False
-                                                                        else False
+                                                    if (exp1 == exp2) 
+                                                        then (True && pruneHelperHelper (var2,exp2) ys)
+                                                            else False
+                                                else (True && pruneHelperHelper (var2,exp2) ys)
 
 
 match :: Expression -> Expression -> [Subst]

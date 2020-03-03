@@ -11,7 +11,7 @@ present (BinOp op expr1 expr2) = "(" ++ present(expr1) ++ presentOp(op) ++ prese
 
 presentOp("Mult") = "*"
 presentOp("Sum") = "+"
-presentOp("Pow") = "*"
+presentOp("Pow") = "^"
 presentOp("Neg") = "-"
 presentOp("Div") = "/"
 presentOp("Min") = "-"
