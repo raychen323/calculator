@@ -1,6 +1,10 @@
 # calculator
 Austin Zhang and Raymond Chen
 
-In order to run the program, need to first `cd src`, and then can run `ghci Simplify.hs`, `ghci Parse.hs` or `ghci TryCalculating.hs`.  To test the program, use `ghci TryCalculating.hs` then `test`.
+To run the program, call `stack run main`.  Our syntax is `derive(expression)` where expression is your following expression.
 
-Received help from Le Chang in TA office hours.
+Our current plan for extra credit:
+* We have extra constant rules to simplify constants
+* We plan on making a GUI to let users input their expressions, and display the output.
+
+Received help from Le Chang, Professor Joosten.

@@ -31,7 +31,7 @@ library
       Parse,
       Simplify,
       Presentable,
-      TryCalculating
+      Laws
   other-modules:
       Paths_calculator
   hs-source-dirs:

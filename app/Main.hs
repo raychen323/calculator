@@ -1,5 +1,5 @@
 module Main where
-import TryCalculating
+import Laws
 import Presentable
 import Simplify
 import Parse
@@ -20,5 +20,5 @@ main = do
     putStrLn "Please type in your equation."
     eq <- getLine
     -- putStrLn(genLaw(eq)) -- use this for running parser for generating laws
-    putStrLn(show(pretty(solve(eq))))
+    putStrLn(finalOutput(pretty(solve(eq))))
     main
