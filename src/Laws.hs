@@ -10,6 +10,7 @@ laws = [
     ,   Law "identity" (BinOp "Mult" (Var "x") (Con 1)) (Var "x")
     ,   Law "identity" (BinOp "Sum" (Var "x") (Con 0)) (Var "x")
     ,   Law "identity" (BinOp "Sum" (Con 0) (Var "x")) (Var "x")
+    ,   Law "identity" (BinOp "Min" (Var "x") (Con 0)) (Var "x")
     ,   Law "identity" (BinOp "Pow" (Var "x") (Con 1)) (Var "x")
     ,   Law "power" (BinOp "Div" (Var "const") (Var "x")) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (UnOp "Neg" (Con 1.0))))
     ,   Law "distributive" (BinOp "Sum" (BinOp "Mult" (Var "x") (Var "y")) (BinOp "Mult" (Var "z") (Var "y"))) (BinOp "Mult" (BinOp "Sum" (Var "x") (Var "z")) (Var "y"))
@@ -27,6 +28,7 @@ laws = [
     ,   Law "addition" (UnOp "derive" (BinOp "Sum" (Var "a") (Var "b"))) (BinOp "Sum" (UnOp "derive" (Var "a")) (UnOp "derive" (Var "b")))
     ,   Law "power" (UnOp "derive" (BinOp "Pow" (Var "x") (Var "y"))) (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "y")) (UnOp "derive" (BinOp "Mult" (Var "y") (UnOp "ln" (Var "x")))))
     ,   Law "multiplication" (UnOp "derive" (BinOp "Mult" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b"))))
+    ,   Law "division" (UnOp "derive" (BinOp "Div" (Var "a") (Var "b"))) (BinOp "Div" (BinOp "Min" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b")))) (BinOp "Pow" (Var "b") (Con 2)))
     ,   Law "const" (UnOp "derive" (Var "const")) (Con 0)
     ,   Law "self" (UnOp "derive" (Var "x")) (Con 1)
         ]
