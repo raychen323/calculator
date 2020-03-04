@@ -20,5 +20,5 @@ main = do
     putStrLn "Please type in your equation."
     eq <- getLine
     -- putStrLn(genLaw(eq)) -- use this for running parser for generating laws
-    putStrLn(show(pretty(solve(eq))))
+    putStrLn(show(prettyOutput(pretty(solve(eq)))))
     main

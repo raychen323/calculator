@@ -2,8 +2,6 @@ module Presentable where
 
 import DataTypes
 
-
-
 prettyOutput (PrettyCalc start steps) = (Output start [(stepName, expr) | PrettyStep stepName expr <- steps ])
 
 --Makes calculation prettier
