@@ -1,5 +1,5 @@
 module Main where
-import TryCalculating
+import Laws
 import Presentable
 import Simplify
 import Parse

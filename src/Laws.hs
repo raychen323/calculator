@@ -1,15 +1,9 @@
-module TryCalculating where
+module Laws where
 import DataTypes
 import Simplify
 import Parse
 import Presentable
 import Text.Megaparsec
-
-
-prettyTest = putStrLn(show (pretty(test)))
-
-test = calculate laws output where
-    Right output = parse parseExpression "" "derive(50*(x^2)+y)" --"derive (sin(x)*(x^(1/2)))"
 
 laws :: [Law]
 laws = [
