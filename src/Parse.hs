@@ -86,4 +86,4 @@ operatorTable =
 
 float :: Parser Float
 float = space *> (try (L.float)
-        <|> L.decimal) <* space
+        <|> (fromIntegral <$> L.decimal)) <* space
