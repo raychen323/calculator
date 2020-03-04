@@ -2,7 +2,9 @@ module Presentable where
 
 import DataTypes
 
-prettyOutput (PrettyCalc start steps) = (Output start [(stepName, expr) | PrettyStep stepName expr <- steps ])
+finalOutput (Output start steps) = start ++ concat(steps)
+
+prettyOutput (PrettyCalc start steps) = (Output start ["\n  ={" ++ stepName ++ "}\n" ++ expr | PrettyStep stepName expr <- steps ])
 
 --Makes calculation prettier
 pretty :: Calculation -> PrettyCalculation
