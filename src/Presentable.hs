@@ -4,7 +4,7 @@ import DataTypes
 
 --Makes calculation prettier
 pretty :: Calculation -> PrettyCalculation
-pretty (Calc expression steps) = PrettyCalc expression [ PrettyStep stepName (present e) | Step stepName e <- steps]
+pretty (Calc expression steps) = PrettyCalc (present expression) [ PrettyStep stepName (present e) | Step stepName e <- steps]
 
 --converts expression to string
 present :: Expression -> String

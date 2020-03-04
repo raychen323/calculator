@@ -18,4 +18,4 @@ data PrettyStep = PrettyStep String String deriving Show
 
 data Calculation = Calc Expression [Step] deriving Show
 
-data PrettyCalculation = PrettyCalc Expression [PrettyStep] deriving Show
+data PrettyCalculation = PrettyCalc String [PrettyStep] deriving Show
