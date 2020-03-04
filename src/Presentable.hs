@@ -2,8 +2,10 @@ module Presentable where
 
 import DataTypes
 
+finalOutput :: Output -> String
 finalOutput (Output start steps) = start ++ concat(steps)
 
+pretty :: Calculation -> Output
 pretty (Calc expression steps) = Output (present(expression)) [ "\n  ={" ++ stepName ++ "}\n" ++ present(e) | Step stepName e <- steps]
 
 --converts expression to string

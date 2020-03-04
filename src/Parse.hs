@@ -9,7 +9,6 @@ import Text.Megaparsec.Char
 import Data.Void(Void)
 import Control.Monad (void)
 import Data.Functor.Identity (Identity)
-import Data.Char
 import Control.Monad.Combinators.Expr
 import qualified Text.Megaparsec.Char.Lexer as L
 

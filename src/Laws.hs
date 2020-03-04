@@ -1,9 +1,5 @@
 module Laws where
 import DataTypes
-import Simplify
-import Parse
-import Presentable
-import Text.Megaparsec
 
 laws :: [Law]
 laws = [
