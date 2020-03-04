@@ -2,6 +2,10 @@ module Presentable where
 
 import DataTypes
 
+
+
+prettyOutput (PrettyCalc start steps) = (Output start [(stepName, expr) | PrettyStep stepName expr <- steps ])
+
 --Makes calculation prettier
 pretty :: Calculation -> PrettyCalculation
 pretty (Calc expression steps) = PrettyCalc (present expression) [ PrettyStep stepName (present e) | Step stepName e <- steps]
