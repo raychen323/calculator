@@ -15,6 +15,7 @@ import qualified Text.Megaparsec.Char.Lexer as L
 
 type Parser = ParsecT Void String Identity
 
+-- Parses the string following d/d as the variable we are deriving with respect to
 parseDerive :: Parser Derive
 parseDerive = Derive <$> (string "d/d" *> parseString) <*> parseExpression
 
@@ -87,6 +88,7 @@ operatorTable =
     ]
   ]
 
+-- Used to get a float number
 float :: Parser Float
 float = space *> (try (L.float)
         <|> (fromIntegral <$> L.decimal)) <* space

@@ -1,6 +1,7 @@
 module Laws where
 import DataTypes
 
+-- Returns a list of our laws, parameter var is only used for the self derivative law, since we know that the derivative should be 1.
 laws :: String -> [Law]
 laws var = [
         -- general

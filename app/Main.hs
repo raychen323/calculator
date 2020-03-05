@@ -7,6 +7,7 @@ import Text.Megaparsec
 import Text.Megaparsec.Char()
 import DataTypes
 
+-- Applys calculation to our parser result
 solve :: String -> Calculation
 solve eq = calculate (laws var) (UnOp "derive" output) where
   Right (Derive var output) = parse parseDerive "" eq
