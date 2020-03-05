@@ -4,7 +4,7 @@ import DataTypes
 laws :: String -> [Law]
 laws var = [
         -- general
-    Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
+        Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
     ,   Law "times zero" (BinOp "Mult" (Var "x") (Con 0)) (Con 0)
     ,   Law "identity" (BinOp "Mult" (Con 1) (Var "x")) (Var "x")
     ,   Law "identity" (BinOp "Mult" (Var "x") (Con 1)) (Var "x")
