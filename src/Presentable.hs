@@ -1,6 +1,9 @@
 module Presentable where
 
 import DataTypes
+solution (Calc e []) = present(e)
+solution (Calc e steps) = do Step string expression <- [last steps]
+                             present(expression)
 
 finalOutput :: Output -> String
 finalOutput (Output start steps) = start ++ concat(steps)

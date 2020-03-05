@@ -1,7 +1,11 @@
 # calculator
 Austin Zhang and Raymond Chen
 
-To run the program, call `stack run main`.  Our syntax is `derive(expression)` where expression is your following expression.
+To run the program, call `stack run main`.  Our syntax is `d/d(var)(expression)`
+
+Examples:
+* d/dx(5+(3*x))
+* d/dy(sin(y^2))
 
 Our current plan for extra credit:
 * We have extra constant rules to simplify constants
