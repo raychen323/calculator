@@ -55,6 +55,7 @@ parseString :: Parser String
 parseString = space *> (some (satisfy f)) <*space
     where f x = not (elem x "\t\r {}()[].=:+-*/^")
 
+-- parses unary operations
 parseUnOp :: Parser Expression
 parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string ")")
 
@@ -62,9 +63,11 @@ parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string 
 parseBinOp :: Parser Expression
 parseBinOp = makeExprParser parseBinHelper operatorTable
 
+-- helper for parsing binary operations
 binary :: String -> (Expression -> Expression -> Expression) -> Operator Parser Expression
 binary  name f = InfixL  (f <$ symbol name)
 
+-- parses prefix/postfix operations
 prefix, postfix :: String -> (Expression -> Expression) -> Operator Parser Expression
 prefix  name f = Prefix  (f <$ symbol name)
 postfix name f = Postfix (f <$ symbol name)
@@ -84,6 +87,7 @@ operatorTable =
     ]
   ]
 
+-- parses floats
 float :: Parser Float
 float = space *> (try (L.float)
         <|> (fromIntegral <$> L.decimal)) <* space
