@@ -90,7 +90,7 @@ main = do
   set solution [ entryEditable := False]
 
   -- create display for the steps the solver takes
-  steps <- createTextDisplay "Steps will show here\n when you input an equation"
+  steps <- createTextDisplay "Steps will show here when you input an equation"
 
   -- create entry for user input
   entry <- entryNew
