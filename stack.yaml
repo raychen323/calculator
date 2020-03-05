@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-15.0
+resolver: lts-14.0
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -34,15 +34,27 @@ packages:
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:
 #
-# extra-deps:
-# - acme-missiles-0.3
-# - git: https://github.com/commercialhaskell/stack.git
-#   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
+# SJC: I needed to downgrade some of these packages a bit because the latest
+#  versions diddn't work on OS X.
+#  I also needed to add the flag 'have-quartz-gtk' to 
+# 
 #
-# extra-deps: []
-
+extra-deps:
+- gtk3-0.15.3
+# - gi-gtk-4.0.1
+# - gi-gdk-4.0.1@sha256:76ae6949b3503c0b518dc537c0e69e6ee7071166b234c505dad60f1d7e209c28,9155
+# - gi-graphene-1.0.1@sha256:baf538f473b2e860ef01349402cc99292ae318ae733d51259e34c5feb590cfba,4645
+# - gi-gsk-4.0.1@sha256:b2c9d3f81f02d559ad1c60a3578939ab0d5bcf5631b432cddcf14c605316089d,3947
+# - gtk-0.15.3
+- cairo-0.13.8.0@sha256:9b64a376ebaa4f153bba5866a32291fd4bed48147009cce9158ce6533928eba8,4075
+- gio-0.13.6.1
+- glib-0.13.7.1
+- gtk2hs-buildtools-0.13.8.0@sha256:132f38155fc677430a47ea750918973161c876fb6f281d342ac2f07eb99229ce,5238
+- pango-0.13.6.1
 # Override default flag values for local packages and extra-deps
-# flags: {}
+# flags:
+#    gtk3:
+#      have-quartz-gtk: true
 
 # Extra package databases containing global packages
 # extra-package-dbs: []
