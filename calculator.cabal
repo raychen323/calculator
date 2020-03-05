@@ -44,13 +44,17 @@ library
 
 executable calculator-gui
   main-is: GUI.hs
+  other-modules:
+      Paths_calculator
   hs-source-dirs:
-     src
+     app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   cpp-options: -U__BLOCKS__ -D__attribute__(A)=
   if os(darwin) || os(freebsd)
        cpp-options: -D_Nullable= -D_Nonnull= -D_Noreturn=
   build-depends:
       base >=4.7 && <5
+      , calculator
       , megaparsec >= 5.0.0 && <= 8.0.0
       , parser-combinators
       , gtk3
