@@ -15,6 +15,10 @@ import qualified Text.Megaparsec.Char.Lexer as L
 
 type Parser = ParsecT Void String Identity
 
+-- Parses the string following d/d as the variable we are deriving with respect to
+parseDerive :: Parser Derive
+parseDerive = Derive <$> (string "d/d" *> parseString) <*> parseExpression
+
 -- Parses an expression into different kinds of expressions
 parseExpression :: Parser Expression
 parseExpression = space *> (try parseBinOp

@@ -1,8 +1,9 @@
 module Laws where
 import DataTypes
 
-laws :: [Law]
-laws = [
+-- Returns a list of our laws, parameter var is only used for the self derivative law, since we know that the derivative should be 1.
+laws :: String -> [Law]
+laws var = [
         -- general
         Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
     ,   Law "times zero" (BinOp "Mult" (Var "x") (Con 0)) (Con 0)
@@ -30,5 +31,5 @@ laws = [
     ,   Law "multiplication" (UnOp "derive" (BinOp "Mult" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b"))))
     ,   Law "division" (UnOp "derive" (BinOp "Div" (Var "a") (Var "b"))) (BinOp "Div" (BinOp "Min" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b")))) (BinOp "Pow" (Var "b") (Con 2)))
     ,   Law "const" (UnOp "derive" (Var "const")) (Con 0)
-    ,   Law "self" (UnOp "derive" (Var "x")) (Con 1)
+    ,   Law "self" (UnOp "derive" (Var var)) (Con 1)
         ]
