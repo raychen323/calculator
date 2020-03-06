@@ -6,13 +6,7 @@
 import Control.Monad
 import Control.Monad.IO.Class
 import Graphics.UI.Gtk hiding (Action, backspace)
-import Laws
 import Presentable
-import Simplify
-import Parse
-import Text.Megaparsec
-import Text.Megaparsec.Char()
-import DataTypes
 
 -- function for making our equals button
 mkBtn :: String -> Entry -> TextView -> Entry -> IO Button
