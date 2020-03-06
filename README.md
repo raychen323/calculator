@@ -12,7 +12,7 @@ Examples:
 * 5+(d/dx(5+3*x))
 
 Extra Credit:
-* We have extra constant rules to simplify constants
-* We made a GUI which allows input and displays the answer and steps
+* We have extra constant rules to simplify constants (can apply operations to constants)
+* We made a GUI which allows users to input and displays the answer and steps
 
 Received help from Le Chang, Professor Joosten.
