@@ -100,7 +100,7 @@ match _ _ = []
 type Subst = [(VarName,Expression)]
 
 
-
+-- Applys a substitution to an expression
 apply :: Subst -> Expression -> Expression
 apply _ x@(Con _) = x
 apply sub (Var v) = binding sub v
@@ -110,6 +110,8 @@ apply sub (UnOp oper expr1) = UnOp oper (apply sub expr1)
 
 
 type VarName = String 
+
+-- Creates a substitution from a variable name and an expression
 unitSub :: VarName -> Expression -> Subst 
 unitSub v e = [(v,e)]
 
