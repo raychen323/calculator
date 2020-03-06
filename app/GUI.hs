@@ -79,8 +79,8 @@ main = do
   window <- windowNew
   set window [ windowTitle         := "Calculator"
              , windowDefaultWidth  := 400
-             , windowResizable     := False
-             , windowDefaultHeight := 800 ]
+             , windowResizable     := True
+             , windowDefaultHeight := 600 ]
 
   -- create layout
   grid <- gridNew
@@ -94,6 +94,9 @@ main = do
   -- create display for the steps the solver takes
   steps <- createTextDisplay "Steps will show here when you input an equation"
 
+  scroll <- scrolledWindowNew Nothing Nothing
+  containerAdd scroll steps
+
   -- create entry for user input
   entry <- entryNew
   set entry [ entryEditable   := True
@@ -102,7 +105,7 @@ main = do
   -- bind our displays to our grid layout
   let attach  x   y   w   h   item = gridAttach grid item x y w h
   attach      0   0   6   1   solutionDisp
-  attach      0   1   6   19  steps
+  attach      0   1   6   19  scroll
   attach      0   20  5   1   entry
   mkBtn "=" entry steps solutionDisp  >>= attach 5 20 1 1
   -- bind our grid to our display and display all of our widgets
