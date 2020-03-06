@@ -7,6 +7,7 @@ To run the program, call `stack run main`.  Our syntax is `d/d(var)(expression)`
 Examples:
 * d/dx(5+(3*x))
 * d/dy(sin(y^2))
+* 5+(d/dx(5+3*x))
 
 Extra Credit:
 * We have extra constant rules to simplify constants

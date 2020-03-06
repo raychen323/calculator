@@ -15,11 +15,7 @@ import qualified Text.Megaparsec.Char.Lexer as L
 
 type Parser = ParsecT Void String Identity
 
--- Parses the string following d/d as the variable we are deriving with respect to
-parseDerive :: Parser Derive
-parseDerive = Derive <$> (string "d/d" *> parseString) <*> parseExpression
-
--- Parses an expression into different kinds of expressions
+-- Parses an expression into diff     ent kinds of expressions
 parseExpression :: Parser Expression
 parseExpression = space *> (try parseBinOp
                         <|> try parseUnOp 
@@ -65,7 +61,8 @@ parseUnOp = UnOp <$> parseString <*> (string "(" *> (parseExpression) <* string 
 
 --Parses infix bin operations
 parseBinOp :: Parser Expression
-parseBinOp = makeExprParser parseBinHelper operatorTable
+parseBinOp = BinOp "derive" <$> ((string "d/d") *> (Var <$> parseString)) <*> parseExpression
+              <|> makeExprParser parseBinHelper operatorTable
 
 -- helper for parsing binary operations
 binary :: String -> (Expression -> Expression -> Expression) -> Operator Parser Expression

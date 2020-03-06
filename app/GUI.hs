@@ -14,15 +14,6 @@ import Text.Megaparsec
 import Text.Megaparsec.Char()
 import DataTypes
 
--- Same function as in main for running our solver
--- Copy pasted here so our command line program is decoupled from our GUI
--- Applies calculation to our parser result
-solve :: String -> Calculation
-solve eq = calc where
-  calc = case (parse parseDerive "" eq) of
-        Left _ -> (Calc (Var "error, parsing failed") [])
-        Right (Derive var output) -> calculate (laws var) (UnOp "derive" output)
-
 -- function for making our equals button
 mkBtn :: String -> Entry -> TextView -> Entry -> IO Button
 mkBtn btnLabel entry steps solView = do

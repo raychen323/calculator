@@ -2,8 +2,8 @@ module Laws where
 import DataTypes
 
 -- Returns a list of our laws, parameter var is only used for the self derivative law, since we know that the derivative should be 1.
-laws :: String -> [Law]
-laws var = [
+laws :: [Law]
+laws = [
         -- general
         Law "times zero" (BinOp "Mult" (Con 0) (Var "x")) (Con 0)
     ,   Law "times zero" (BinOp "Mult" (Var "x") (Con 0)) (Con 0)
@@ -23,13 +23,13 @@ laws var = [
     ,   Law "power inverse" (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "p")) (BinOp "Div" (Var "const") (Var "x"))) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (BinOp "Min" (Var "p") (Con 1))))
     ,   Law "add powers" (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "p")) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (Var "a")))) (BinOp "Mult" (Var "const") (BinOp "Pow" (Var "x") (BinOp "Sum" (Var "p") (Var "a"))))
     -- derivative laws
-    ,   Law "sin" (UnOp "derive" (UnOp "sin" (Var "x"))) (BinOp "Mult" (UnOp "cos" (Var "x")) (UnOp "derive" (Var "x")))
-    ,   Law "cos" (UnOp "derive" (UnOp "cos" (Var "x"))) (BinOp "Mult" (UnOp "Neg" (UnOp "sin" (Var "x"))) (UnOp "derive" (Var "x")))
-    ,   Law "ln" (UnOp "derive" (UnOp "ln" (Var "x"))) (BinOp "Mult" (BinOp "Div" (Con 1) (Var "x")) (UnOp "derive" (Var "x")))
-    ,   Law "addition" (UnOp "derive" (BinOp "Sum" (Var "a") (Var "b"))) (BinOp "Sum" (UnOp "derive" (Var "a")) (UnOp "derive" (Var "b")))
-    ,   Law "power" (UnOp "derive" (BinOp "Pow" (Var "x") (Var "y"))) (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "y")) (UnOp "derive" (BinOp "Mult" (Var "y") (UnOp "ln" (Var "x")))))
-    ,   Law "multiplication" (UnOp "derive" (BinOp "Mult" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b"))))
-    ,   Law "division" (UnOp "derive" (BinOp "Div" (Var "a") (Var "b"))) (BinOp "Div" (BinOp "Min" (BinOp "Mult" (UnOp "derive" (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (UnOp "derive" (Var "b")))) (BinOp "Pow" (Var "b") (Con 2)))
-    ,   Law "const" (UnOp "derive" (Var "const")) (Con 0)
-    ,   Law "self" (UnOp "derive" (Var var)) (Con 1)
+    ,   Law "sin" (BinOp "derive" (Var "var") (UnOp "sin" (Var "x"))) (BinOp "Mult" (UnOp "cos" (Var "x")) (BinOp "derive" (Var "var") (Var "x")))
+    ,   Law "cos" (BinOp "derive" (Var "var") (UnOp "cos" (Var "x"))) (BinOp "Mult" (UnOp "Neg" (UnOp "sin" (Var "x"))) (BinOp "derive" (Var "var") (Var "x")))
+    ,   Law "ln" (BinOp "derive" (Var "var") (UnOp "ln" (Var "x"))) (BinOp "Mult" (BinOp "Div" (Con 1) (Var "x")) (BinOp "derive" (Var "var") (Var "x")))
+    ,   Law "addition" (BinOp "derive" (Var "var") (BinOp "Sum" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "derive" (Var "var") (Var "a")) (BinOp "derive" (Var "var") (Var "b")))
+    ,   Law "power" (BinOp "derive" (Var "var") (BinOp "Pow" (Var "x") (Var "y"))) (BinOp "Mult" (BinOp "Pow" (Var "x") (Var "y")) (BinOp "derive" (Var "var") (BinOp "Mult" (Var "y") (UnOp "ln" (Var "x")))))
+    ,   Law "multiplication" (BinOp "derive" (Var "var") (BinOp "Mult" (Var "a") (Var "b"))) (BinOp "Sum" (BinOp "Mult" (BinOp "derive" (Var "var") (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (BinOp "derive" (Var "var") (Var "b"))))
+    ,   Law "division" (BinOp "derive" (Var "var") (BinOp "Div" (Var "a") (Var "b"))) (BinOp "Div" (BinOp "Min" (BinOp "Mult" (BinOp "derive" (Var "var") (Var "a")) (Var "b")) (BinOp "Mult" (Var "a") (BinOp "derive" (Var "var") (Var "b")))) (BinOp "Pow" (Var "b") (Con 2)))
+    ,   Law "const" (BinOp "derive" (Var "var") (Var "const")) (Con 0)
+    ,   Law "self" (BinOp "derive" (Var "var") (Var "var")) (Con 1)
         ]
