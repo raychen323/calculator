@@ -5,6 +5,11 @@ import DataTypes
 finalOutput :: Output -> String
 finalOutput (Output start steps) = start ++ concat(steps)
 
+finalSolution :: Calculation -> String
+finalSolution (Calc expr []) = present expr
+finalSolution (Calc expr steps) = present answer where
+                                            (Step label answer) = (last steps)
+
 pretty :: Calculation -> Output
 pretty (Calc expression steps) = Output (present(expression)) [ "\n  ={" ++ stepName ++ "}\n" ++ present(e) | Step stepName e <- steps]
 

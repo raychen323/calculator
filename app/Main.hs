@@ -7,10 +7,13 @@ import Text.Megaparsec
 import Text.Megaparsec.Char()
 import DataTypes
 
--- Applys calculation to our parser result
+-- Applies calculation to our parser result
 solve :: String -> Calculation
-solve eq = calculate (laws var) (UnOp "derive" output) where
-  Right (Derive var output) = parse parseDerive "" eq
+solve eq = calc where
+  calc = case (parse parseDerive "" eq) of
+        Left _ -> (Calc (Var "error") [])
+        Right (Derive var output) -> calculate (laws var) (UnOp "derive" output)
+
 
 -- genLaw :: String -> String
 -- genLaw eq = show output where

@@ -16,9 +16,12 @@ import DataTypes
 
 -- Same function as in main for running our solver
 -- Copy pasted here so our command line program is decoupled from our GUI
+-- Applies calculation to our parser result
 solve :: String -> Calculation
-solve eq = calculate laws output where
-  Right output = parse parseExpression "" eq
+solve eq = calc where
+  calc = case (parse parseDerive "" eq) of
+        Left _ -> (Calc (Var "error") [])
+        Right (Derive var output) -> calculate (laws var) (UnOp "derive" output)
 
 -- function for making our equals button
 mkBtn :: String -> Entry -> TextView -> Entry -> IO Button
@@ -31,11 +34,11 @@ mkBtn btnLabel entry steps solView = do
     -- get the user input
     input <- entryGetText entry
     -- plug it into our calculator
-    let calculation = solve input
+    let soln = solve input
     -- display the steps
-    editTextDisplay steps (finalOutput(pretty(calculation)))
+    editTextDisplay steps (finalOutput(pretty(soln)))
     -- display the final answer
-    entrySetText solView (solution calculation)
+    entrySetText solView (finalSolution soln)
     -- reset the entry field to empty string
     entrySetText entry ""
   -- return the button we made
