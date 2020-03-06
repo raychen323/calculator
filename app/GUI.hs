@@ -20,7 +20,7 @@ import DataTypes
 solve :: String -> Calculation
 solve eq = calc where
   calc = case (parse parseDerive "" eq) of
-        Left _ -> (Calc (Var "error") [])
+        Left _ -> (Calc (Var "error, parsing failed") [])
         Right (Derive var output) -> calculate (laws var) (UnOp "derive" output)
 
 -- function for making our equals button
