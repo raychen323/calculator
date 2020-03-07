@@ -2,7 +2,7 @@
 
 Austin Zhang and Raymond Chen
 
-To run the program, call `stack run main`.  Our syntax is `d/d(var)(expression)` Make sure to explicity type every operation and parentheses.
+To run the program, call `stack run main`.  Our syntax is `(d/d(var) expression)` Make sure to explicity type every operation and parentheses (except for the one around var).
 
 To run the GUI, call `stack run calculator-gui`. Our syntax for the GUI is the same as above. The window is resizable and you can type in equations by inputting in the bottom text field. Press = to run the calculator. To exit, just close the window.
 
