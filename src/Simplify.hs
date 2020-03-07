@@ -115,28 +115,8 @@ type VarName = String
 unitSub :: VarName -> Expression -> Subst 
 unitSub v e = [(v,e)]
 
+-- Applys substitution to variable
 binding :: Subst -> VarName -> Expression 
 binding ((v',e):sub) v | v' == v = e                                  
     | otherwise = binding sub v 
 binding [] _ = error "Could not find binding"
-
-combine :: [[Subst]] -> [Subst]
-combine = filterUnifiable . cp
-
-cp :: [[a]] -> [[a]]
-cp [] = []
-cp (xs:xss) = [x:ys | x <- xs, ys <- cp xss]
-
-filterUnifiable :: [[Subst]] -> [Subst]
-filterUnifiable = concatMap unifyAll 
-
-unifyAll :: [Subst] -> [Subst] 
-unifyAll = foldr f []   
-    where f sub subs = concatMap (unify sub) subs
-
-unify :: Subst -> Subst -> [Subst] 
-unify s1 s2 = if compatible s1 s2 then [s1 ++ s2] else [] 
-
-compatible :: Subst -> Subst -> Bool 
-compatible sub1 sub2   
-    = and [e1 == e2 | (v1, e1) <- sub1, (v2, e2) <-sub2, v1==v2]
